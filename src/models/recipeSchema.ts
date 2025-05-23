@@ -25,6 +25,10 @@ const RecipeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  author: {
+    type: mongoose.Schema.ObjectId,
+    ref: "user",
+  },
   profileImage: {
     type: String,
     required: true,
@@ -34,5 +38,7 @@ const RecipeSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+RecipeSchema.index({ title: "text", name: "text" });
 
 export default mongoose.model("Recipe", RecipeSchema);

@@ -71,3 +71,31 @@ export const login = async (
     next(err);
   }
 };
+
+export const checkAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  res.status(200).json({
+    //  isLoggedIn: true, user: req.user
+    isLoggedIn: req.isAuthenticated,
+    user: req.user,
+  });
+};
+
+export const signout = async (req: Request, res: Response) => {
+  res.clearCookie("access_token");
+  res.status(200).json({ message: "Signed out successfully" });
+};
+
+// export const checkUser = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   res.status(200).json({
+//     message: "user is authorized to manage this account",
+//     user: req.user,
+//   });
+// };

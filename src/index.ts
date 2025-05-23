@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import authRoute from "./api/routes/auth";
 import userRoute from "./api/routes/users";
 import recipeRoute from "./api/routes/recipes";
+// import searchRoute from "../src/api/routes/search";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -22,7 +23,13 @@ declare global {
         gender: string;
         isAdmin: boolean;
         profileImage?: string;
+        socialhandle?: {
+          instagram: string;
+          facebook: string;
+          whatsapp: string;
+        };
       };
+      isAuthenticated?: boolean;
     }
   }
 }
@@ -46,9 +53,19 @@ const connect = async () => {
 app.use(
   cors({
     origin: "http://localhost:3000", // your frontend origin
+
     credentials: true, // allow cookies, auth headers
   })
 );
+const swaggerUi = require("swagger-ui-express");
+
+var options = {
+  swaggerOptions: {
+    url: "http://petstore.swagger.io/v2/swagger.json",
+  },
+};
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(null, options));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -56,6 +73,7 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/recipe", recipeRoute);
+// app.use("/api/search", searchRoute);
 
 app.listen(5000, () => {
   connect();

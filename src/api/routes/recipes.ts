@@ -5,19 +5,23 @@ import {
   getAllRecipe,
   getOneRecipe,
   updateRecipe,
-} from "../../controller/recipeContrlller";
-import { verifyToken } from "../../utils/vorifyToken";
+  getAllAuthorsRecipe,
+  getSearchedRecipes,
+} from "../../controller/recipeController";
+import { verifyToken, verifyUser } from "../../utils/vorifyToken";
 
 const router = express.Router();
 
 router.post("/", verifyToken, createRecipe);
 
-router.put("/:id", updateRecipe);
+router.put("/:id", verifyUser, updateRecipe);
 
-router.delete("/:id", deleteRecipe);
+router.delete("/:id", verifyUser, deleteRecipe);
 
 router.get("/:id", getOneRecipe);
 
-router.get("/", getAllRecipe);
+router.get("/", getSearchedRecipes);
+
+router.get("/my-recipes", verifyToken, getAllAuthorsRecipe);
 
 export default router;

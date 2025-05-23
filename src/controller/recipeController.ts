@@ -8,6 +8,7 @@ export const createRecipe = async (
   next: NextFunction
 ) => {
   const newRecipe = new Recipe(req.body);
+  const author = req.user._id;
 
   try {
     const saveRecipe = await newRecipe.save();
@@ -75,6 +76,47 @@ export const getAllRecipe = async (
   try {
     const recipes = await Recipe.find();
     res.status(200).json(recipes);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getAllAuthorsRecipe = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = {
+      author: req.user._id,
+    };
+    const recipes = await Recipe.find(query).populate("user");
+    res.status(200).json(recipes);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getSearchedRecipes = async (
+  req: Request<{}, {}, {}, { searchedText: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { searchedText } = req.query;
+  let results;
+
+  try {
+    if (!searchedText) {
+      // No search text — return all recipes (or apply any default filter/limit)
+      results = await Recipe.find({}).lean().limit(20);
+    } else {
+      // Text search
+      results = await Recipe.find({ $text: { $search: searchedText } })
+        .lean()
+        .limit(20);
+    }
+
+    res.status(200).json(results);
   } catch (err) {
     next(err);
   }
