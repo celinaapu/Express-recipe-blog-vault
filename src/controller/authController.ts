@@ -89,13 +89,13 @@ export const signout = async (req: Request, res: Response) => {
   res.status(200).json({ message: "Signed out successfully" });
 };
 
-// export const checkUser = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   res.status(200).json({
-//     message: "user is authorized to manage this account",
-//     user: req.user,
-//   });
-// };
+export const checkUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  res.status(200).json({
+    message: "user is authorized to manage this account",
+    user: req.user,
+  });
+};

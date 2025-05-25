@@ -28,7 +28,7 @@ export const getCurrentUserProfile = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<any> => {
   try {
     if (!req.user?.id) {
       return res.status(401).json({ message: "User not autjenticated" });
@@ -39,11 +39,9 @@ export const getCurrentUserProfile = async (
     }
     const userProfile = {
       ...user.toObject(),
-      socialhandle: user.socialhandle || {
-        instagram: "",
-        facebook: "",
-        whatsapp: "",
-      },
+      id: user._id,
+      username: user.username,
+      email: user.email,
     };
     res.status(200).json(userProfile);
   } catch (err) {
@@ -56,7 +54,7 @@ export const updateCurrentUserProfile = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<any> => {
   try {
     if (!req.user?.id) {
       return res.status(401).json({ message: "User not authenticated" });

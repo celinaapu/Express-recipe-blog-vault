@@ -15,6 +15,13 @@ export const verifyToken = (
     return next(createError(401, "you are not authenticated!"));
   }
   jwt.verify(token, process.env.JWT_SECRET_TOKEN!, (err: any, user: any) => {
+    console.log("🔍 JWT Token payload:", { user, err });
+    console.log("🔍 User ID from token:", user?.id);
+    console.log(
+      "🔍 Full user object from token:",
+      JSON.stringify(user, null, 2)
+    );
+
     if (err) return next(createError(403, "Invalid Token!"));
     req.user = user;
     req.isAuthenticated = true;
@@ -24,7 +31,7 @@ export const verifyToken = (
 
 export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id) {
+    if (req.user.id) {
       next();
     } else {
       return next(createError(403, "you are not authorized"));

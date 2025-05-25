@@ -85,12 +85,16 @@ export const getAllAuthorsRecipe = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<any> => {
   try {
+    // if (!req.user || !req.user._id) {
+    //   return res.status(401).json({ message: "User not authenticated" });
+    // }
+
     const query = {
-      author: req.user._id,
+      author: req.user.id,
     };
-    const recipes = await Recipe.find(query).populate("user");
+    const recipes = await Recipe.find(query);
     res.status(200).json(recipes);
   } catch (err) {
     next(err);

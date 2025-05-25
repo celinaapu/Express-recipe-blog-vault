@@ -22,6 +22,6 @@ router.get("/:id", getOneRecipe);
 
 router.get("/", getSearchedRecipes);
 
-router.get("/my-recipes", verifyToken, getAllAuthorsRecipe);
+router.get("/user/my-recipes", verifyToken, getAllAuthorsRecipe);
 
 export default router;
